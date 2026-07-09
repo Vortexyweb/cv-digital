@@ -153,10 +153,14 @@
     }
 
     @media (max-width: 600px) {
-      body { padding: 1rem; }
-      .terminal-content { padding: 16px; }
-      .social-btn { display: flex; margin-bottom: 12px; margin-right: 0; justify-content: center; }
-      .links-section { flex-direction: column; }
+      body { padding: 0.5rem; }
+      .terminal-window { border-radius: 8px; }
+      .title-bar { padding: 8px 12px; }
+      .window-title { margin-left: 0; font-size: 0.75rem; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .terminal-content { padding: 12px; max-height: 88vh; }
+      #terminal-output { font-size: 0.8rem; }
+      .social-btn { display: flex; margin-bottom: 10px; margin-right: 0; justify-content: center; padding: 10px; font-size: 0.85rem; }
+      .links-section { flex-direction: column; margin-top: 20px; }
     }
   </style>
 </head>
