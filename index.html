@@ -14,9 +14,9 @@
     }
 
     body {
-      background-color: #121212;
-      background-image: radial-gradient(circle at 50% 50%, #2a2a35 0%, #121212 100%);
-      color: #f8f8f2;
+      background-color: #000;
+      background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
+      color: #00ffcc;
       font-family: 'Fira Code', monospace;
       min-height: 100vh;
       display: flex;
@@ -27,22 +27,22 @@
 
     /* MacOS-like Terminal Window */
     .terminal-window {
-      background-color: #282a36;
+      background-color: #0d0d0d;
       width: 100%;
       max-width: 900px;
       border-radius: 12px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 255, 204, 0.1);
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
     .title-bar {
-      background-color: #1e1f29;
+      background-color: #1a1a1a;
       padding: 12px 16px;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #191a21;
+      border-bottom: 1px solid #333;
     }
 
     .mac-buttons {
@@ -64,7 +64,7 @@
     .window-title {
       flex: 1;
       text-align: center;
-      color: #6272a4;
+      color: #888;
       font-size: 0.85rem;
       font-weight: 600;
       margin-left: -44px; /* Offset to center text ignoring buttons */
@@ -80,25 +80,25 @@
       line-height: 1.6;
       font-size: 0.95rem;
       white-space: pre-wrap;
-      color: #e2e8f0;
+      color: #00ffcc;
     }
 
     .prompt {
-      color: #10b981; /* Emerald Green */
+      color: #ff00ff; /* Pink */
       font-weight: 600;
     }
 
     .cmd {
-      color: #f8fafc; /* White */
+      color: #ffffff; /* White */
       font-weight: 600;
     }
 
     .output-text {
-      color: #cbd5e1; /* Light Slate */
+      color: #00ffcc; /* Neon Green */
     }
     
     .output-info {
-      color: #38bdf8; /* Sky Blue */
+      color: #00ffcc; /* Neon Green */
       font-weight: 600;
     }
 
@@ -106,7 +106,7 @@
       display: inline-block;
       width: 10px;
       height: 1.1rem;
-      background-color: #10b981;
+      background-color: #00ffcc;
       animation: blink 1s step-end infinite;
       vertical-align: middle;
       margin-left: 5px;
@@ -211,18 +211,22 @@
       
       outputDiv.innerHTML += prefix;
       
-      // Se for HTML (como nossas spans coloridas), injetamos direto sem delay de digitação
+      // Se for output, imprime linha por linha com um pequeno delay
       if (!isCmd) {
-        outputDiv.innerHTML += text + suffix;
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        const lines = text.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+          outputDiv.innerHTML += lines[i] + (i < lines.length - 1 ? '\n' : suffix);
+          scrollContainer.scrollTop = scrollContainer.scrollHeight;
+          await new Promise(r => setTimeout(r, 150)); // Atraso por linha
+        }
         return;
       }
 
-      // Efeito de digitação apenas para os comandos
+      // Efeito de digitação rápida para os comandos
       for (let i = 0; i < text.length; i++) {
         outputDiv.innerHTML += text.charAt(i);
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
-        await new Promise(r => setTimeout(r, 60)); // Digitação mais lenta (era 40)
+        await new Promise(r => setTimeout(r, 25)); // Digitação bem mais rápida (era 60)
       }
       
       outputDiv.innerHTML += suffix;
@@ -231,10 +235,10 @@
     async function runTerminal() {
       for (const item of cvData) {
         if (item.type === 'cmd') {
-          await new Promise(r => setTimeout(r, 1500)); // Pausa maior antes de digitar o comando (era 600)
+          await new Promise(r => setTimeout(r, 500)); // Pausa rápida antes do comando
           await typeText(item.text, true);
         } else {
-          await new Promise(r => setTimeout(r, 600)); // Pausa maior para fingir processamento (era 200)
+          await new Promise(r => setTimeout(r, 300)); // Pausa rápida antes do output
           await typeText(item.text, false);
         }
       }
@@ -243,11 +247,11 @@
         links.style.display = 'flex';
         cursor.style.display = 'none';
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      }, 1000); // Pausa maior antes de exibir botões finais
+      }, 500);
     }
 
     window.onload = () => {
-      setTimeout(runTerminal, 1000); // Pausa inicial levemente maior
+      setTimeout(runTerminal, 600);
     };
   </script>
 </body>
