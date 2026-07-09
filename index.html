@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gabriel Bueno | CV Digital</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
     
     * {
       box-sizing: border-box;
@@ -14,59 +14,97 @@
     }
 
     body {
-      background-color: #0d0d0d;
-      color: #00ffcc;
+      background-color: #121212;
+      background-image: radial-gradient(circle at 50% 50%, #2a2a35 0%, #121212 100%);
+      color: #f8f8f2;
       font-family: 'Fira Code', monospace;
-      padding: 2rem;
       min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* CRT Screen Effect */
-    body::before {
-      content: " ";
-      display: block;
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-      z-index: 2;
-      background-size: 100% 2px, 3px 100%;
-      pointer-events: none;
-    }
-
-    .terminal-header {
       display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #333;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-      color: #888;
-      font-size: 0.9rem;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    /* MacOS-like Terminal Window */
+    .terminal-window {
+      background-color: #282a36;
+      width: 100%;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .title-bar {
+      background-color: #1e1f29;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #191a21;
+    }
+
+    .mac-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mac-buttons span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .close { background-color: #ff5f56; }
+    .minimize { background-color: #ffbd2e; }
+    .maximize { background-color: #27c93f; }
+
+    .window-title {
+      flex: 1;
+      text-align: center;
+      color: #6272a4;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-left: -44px; /* Offset to center text ignoring buttons */
+    }
+
+    .terminal-content {
+      padding: 24px;
+      overflow-y: auto;
+      max-height: 80vh;
     }
 
     #terminal-output {
       line-height: 1.6;
-      font-size: 1rem;
+      font-size: 0.95rem;
       white-space: pre-wrap;
-      text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
     }
 
     .prompt {
-      color: #ff00ff;
+      color: #ff79c6; /* Pink */
+      font-weight: 600;
     }
 
     .cmd {
-      color: #fff;
+      color: #50fa7b; /* Green */
+      font-weight: 600;
+    }
+
+    .output-text {
+      color: #f1fa8c; /* Yellowish for strings */
+    }
+    
+    .output-info {
+      color: #8be9fd; /* Cyan for info */
     }
 
     .cursor {
       display: inline-block;
       width: 10px;
-      height: 1.2rem;
-      background-color: #00ffcc;
+      height: 1.1rem;
+      background-color: #f8f8f2;
       animation: blink 1s step-end infinite;
       vertical-align: middle;
       margin-left: 5px;
@@ -81,6 +119,8 @@
       margin-top: 30px;
       display: none;
       animation: fadeIn 1s forwards;
+      border-top: 1px dashed #6272a4;
+      padding-top: 20px;
     }
 
     @keyframes fadeIn {
@@ -89,81 +129,95 @@
     }
 
     .social-btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       margin-right: 15px;
-      padding: 10px 20px;
-      background: rgba(0, 255, 204, 0.1);
-      color: #00ffcc;
+      padding: 8px 16px;
+      background: transparent;
+      color: #8be9fd;
       text-decoration: none;
-      border: 1px solid #00ffcc;
-      border-radius: 4px;
-      font-weight: bold;
-      transition: all 0.3s;
-      text-shadow: 0 0 5px rgba(0, 255, 204, 0.8);
-      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+      border: 1px solid #6272a4;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.2s;
     }
 
     .social-btn:hover {
-      background: #00ffcc;
-      color: #000;
-      box-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
+      background: #8be9fd;
+      color: #282a36;
+      border-color: #8be9fd;
+      box-shadow: 0 0 15px rgba(139, 233, 253, 0.4);
+      transform: translateY(-2px);
     }
 
     @media (max-width: 600px) {
       body { padding: 1rem; }
-      .social-btn { display: block; margin-bottom: 10px; text-align: center; margin-right: 0; }
+      .terminal-content { padding: 16px; }
+      .social-btn { display: flex; margin-bottom: 12px; margin-right: 0; justify-content: center; }
+      .links-section { flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <div class="terminal-header">
-    <span>[gabriel@vortexyweb: ~/cv-digital]</span>
-    <span id="datetime"></span>
-  </div>
 
-  <div id="terminal-output"></div>
-  <div class="cursor" id="cursor"></div>
+  <div class="terminal-window">
+    <div class="title-bar">
+      <div class="mac-buttons">
+        <span class="close"></span>
+        <span class="minimize"></span>
+        <span class="maximize"></span>
+      </div>
+      <div class="window-title">gabriel@vortexyweb: ~/cv-digital</div>
+    </div>
+    
+    <div class="terminal-content" id="terminal-scroll">
+      <div id="terminal-output"></div>
+      <div class="cursor" id="cursor"></div>
 
-  <div class="links-section" id="links">
-    <a href="Gabriel_Bueno_CV.pdf" download class="social-btn">> Baixar CV (PDF)_</a>
-    <a href="https://linkedin.com/in/gabriel-bueno-67ab79383" target="_blank" class="social-btn">> LinkedIn_</a>
-    <a href="https://github.com/Vortexyweb" target="_blank" class="social-btn">> GitHub_</a>
-    <a href="https://wa.me/5541988062465" target="_blank" class="social-btn">> WhatsApp_</a>
+      <div class="links-section" id="links">
+        <a href="Gabriel_Bueno_CV.pdf" download class="social-btn">> Baixar_CV.pdf</a>
+        <a href="https://linkedin.com/in/gabriel-bueno-67ab79383" target="_blank" class="social-btn">> LinkedIn.exe</a>
+        <a href="https://github.com/Vortexyweb" target="_blank" class="social-btn">> GitHub.sh</a>
+        <a href="https://wa.me/5541988062465" target="_blank" class="social-btn">> WhatsApp.bat</a>
+      </div>
+    </div>
   </div>
 
   <script>
     const cvData = [
       { type: 'cmd', text: 'dig TXT bio.cv.local +short' },
-      { type: 'output', text: '"Gabriel Bueno - Estudante de ADS na Uninter e Desenvolvedor Backend."\n"Transição de sólida experiência em coordenação operacional e liderança para TI."\n"Foco em Node.js, Python, FastAPI, e Arquitetura de Redes."' },
+      { type: 'output', text: '<span class="output-text">"Gabriel Bueno - Estudante de ADS na Uninter e Desenvolvedor Backend."</span>\n<span class="output-text">"Transição de sólida experiência em coordenação operacional e liderança para TI."</span>\n<span class="output-text">"Foco em Node.js, Python, FastAPI, e Arquitetura de Redes."</span>' },
       { type: 'cmd', text: 'dig TXT skills.cv.local +short' },
-      { type: 'output', text: '"--- TECNOLOGIA ---"\n"Node.js, Python, JavaScript (ES6), Git & GitHub, SQLite, Redes."\n"--- OPERACIONAL ---"\n"Liderança de Equipes, Atendimento ao Cliente, Gestão de Conflitos, PDV."' },
+      { type: 'output', text: '<span class="output-info">--- TECNOLOGIA ---</span>\n<span class="output-text">"Node.js, Python, JavaScript (ES6), Git & GitHub, SQLite, Redes."</span>\n<span class="output-info">--- OPERACIONAL ---</span>\n<span class="output-text">"Liderança de Equipes, Atendimento ao Cliente, Gestão de Conflitos, PDV."</span>' },
       { type: 'cmd', text: 'dig TXT projects.cv.local +short' },
-      { type: 'output', text: '"[Lunae] App Full-stack (React Native + FastAPI) para gestão de ciclo de casais."\n"[VortexScanner] Ferramenta em Node.js para varredura de IPs e resolução DNS."\n"[DNS-CV] Servidor DNS customizado para entrega deste próprio currículo."\n"[VortexWiki] Wiki Markdown com auto-save em tempo real e busca."\n"[VortexMonitor] Dashboard Cyberpunk de monitoramento de hardware em tempo real."' },
+      { type: 'output', text: '<span class="output-info">[Lunae]</span> <span class="output-text">App Full-stack (React Native + FastAPI) para gestão de ciclo de casais.</span>\n<span class="output-info">[VortexScanner]</span> <span class="output-text">Ferramenta em Node.js para varredura de IPs e resolução DNS.</span>\n<span class="output-info">[DNS-CV]</span> <span class="output-text">Servidor DNS customizado para entrega deste próprio currículo.</span>\n<span class="output-info">[VortexWiki]</span> <span class="output-text">Wiki Markdown com auto-save em tempo real e busca.</span>\n<span class="output-info">[VortexMonitor]</span> <span class="output-text">Dashboard Cyberpunk de monitoramento de hardware.</span>' },
       { type: 'cmd', text: 'cat contatos.txt' },
-      { type: 'output', text: 'Conexão estabelecida com sucesso. Acesse os links abaixo para contato direto:' }
+      { type: 'output', text: '<span class="output-info">Conexão estabelecida com sucesso. Acesse os links abaixo para contato direto:</span>' }
     ];
 
     const outputDiv = document.getElementById('terminal-output');
     const cursor = document.getElementById('cursor');
     const links = document.getElementById('links');
-    
-    function updateTime() {
-      const now = new Date();
-      document.getElementById('datetime').innerText = now.toLocaleString('pt-BR');
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
+    const scrollContainer = document.getElementById('terminal-scroll');
 
     async function typeText(text, isCmd) {
-      const prefix = isCmd ? '<span class="prompt">➜ </span> <span class="cmd">' : '<span style="color:#a8b2d1;">';
-      const suffix = '</span>\n';
+      const prefix = isCmd ? '<span class="prompt">➜ </span> <span class="cmd">' : '';
+      const suffix = isCmd ? '</span>\n' : '\n';
       
       outputDiv.innerHTML += prefix;
       
+      // Se for HTML (como nossas spans coloridas), injetamos direto sem delay de digitação
+      if (!isCmd) {
+        outputDiv.innerHTML += text + suffix;
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        return;
+      }
+
+      // Efeito de digitação apenas para os comandos
       for (let i = 0; i < text.length; i++) {
         outputDiv.innerHTML += text.charAt(i);
-        window.scrollTo(0, document.body.scrollHeight);
-        await new Promise(r => setTimeout(r, isCmd ? 30 : 5));
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        await new Promise(r => setTimeout(r, 40));
       }
       
       outputDiv.innerHTML += suffix;
@@ -172,23 +226,23 @@
     async function runTerminal() {
       for (const item of cvData) {
         if (item.type === 'cmd') {
-          await new Promise(r => setTimeout(r, 800));
+          await new Promise(r => setTimeout(r, 600));
           await typeText(item.text, true);
         } else {
-          await new Promise(r => setTimeout(r, 400));
-          await typeText(item.text + '\n', false);
+          await new Promise(r => setTimeout(r, 200));
+          await typeText(item.text, false);
         }
       }
       
       setTimeout(() => {
-        links.style.display = 'block';
+        links.style.display = 'flex';
         cursor.style.display = 'none';
-        window.scrollTo(0, document.body.scrollHeight);
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
       }, 500);
     }
 
     window.onload = () => {
-      setTimeout(runTerminal, 1000);
+      setTimeout(runTerminal, 800);
     };
   </script>
 </body>
