@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gabriel Bueno | CV Digital</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0d0d0d;
+      color: #00ffcc;
+      font-family: 'Fira Code', monospace;
+      padding: 2rem;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* CRT Screen Effect */
+    body::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 2;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    #terminal-output {
+      line-height: 1.6;
+      font-size: 1rem;
+      white-space: pre-wrap;
+      text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
+    }
+
+    .prompt {
+      color: #ff00ff;
+    }
+
+    .cmd {
+      color: #fff;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2rem;
+      background-color: #00ffcc;
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .links-section {
+      margin-top: 30px;
+      display: none;
+      animation: fadeIn 1s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { display: flex; opacity: 1; }
+      from { opacity: 0; }
+    }
+
+    .social-btn {
+      display: inline-block;
+      margin-right: 15px;
+      padding: 10px 20px;
+      background: rgba(0, 255, 204, 0.1);
+      color: #00ffcc;
+      text-decoration: none;
+      border: 1px solid #00ffcc;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: all 0.3s;
+      text-shadow: 0 0 5px rgba(0, 255, 204, 0.8);
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+    }
+
+    .social-btn:hover {
+      background: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 1rem; }
+      .social-btn { display: block; margin-bottom: 10px; text-align: center; margin-right: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal-header">
+    <span>[gabriel@vortexyweb: ~/cv-digital]</span>
+    <span id="datetime"></span>
+  </div>
+
+  <div id="terminal-output"></div>
+  <div class="cursor" id="cursor"></div>
+
+  <div class="links-section" id="links">
+    <a href="https://linkedin.com/in/gabriel-bueno-67ab79383" target="_blank" class="social-btn">> LinkedIn_</a>
+    <a href="https://github.com/Vortexyweb" target="_blank" class="social-btn">> GitHub_</a>
+    <a href="mailto:contato@gabrielbueno.dev" class="social-btn">> Email_</a>
+  </div>
+
+  <script>
+    const cvData = [
+      { type: 'cmd', text: 'dig TXT bio.cv.local +short' },
+      { type: 'output', text: '"Gabriel Bueno - Estudante de ADS na Uninter e Desenvolvedor Backend."\n"Transição de sólida experiência em coordenação operacional e liderança para TI."\n"Foco em Node.js, Python, FastAPI, e Arquitetura de Redes."' },
+      { type: 'cmd', text: 'dig TXT skills.cv.local +short' },
+      { type: 'output', text: '"--- TECNOLOGIA ---"\n"Node.js, Python, JavaScript (ES6), Git & GitHub, SQLite, Redes."\n"--- OPERACIONAL ---"\n"Liderança de Equipes, Atendimento ao Cliente, Gestão de Conflitos, PDV."' },
+      { type: 'cmd', text: 'dig TXT projects.cv.local +short' },
+      { type: 'output', text: '"[Lunae] App Full-stack (React Native + FastAPI) para gestão de ciclo de casais."\n"[VortexScanner] Ferramenta em Node.js para varredura de IPs e resolução DNS."\n"[DNS-CV] Servidor DNS customizado para entrega deste próprio currículo."\n"[VortexWiki] Wiki Markdown com auto-save em tempo real e busca."\n"[VortexMonitor] Dashboard Cyberpunk de monitoramento de hardware em tempo real."' },
+      { type: 'cmd', text: 'cat contatos.txt' },
+      { type: 'output', text: 'Conexão estabelecida com sucesso. Acesse os links abaixo para contato direto:' }
+    ];
+
+    const outputDiv = document.getElementById('terminal-output');
+    const cursor = document.getElementById('cursor');
+    const links = document.getElementById('links');
+    
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('datetime').innerText = now.toLocaleString('pt-BR');
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    async function typeText(text, isCmd) {
+      const prefix = isCmd ? '<span class="prompt">PS C:\\Users\\Nyox></span> <span class="cmd">' : '<span style="color:#a8b2d1;">';
+      const suffix = '</span>\n';
+      
+      outputDiv.innerHTML += prefix;
+      
+      for (let i = 0; i < text.length; i++) {
+        outputDiv.innerHTML += text.charAt(i);
+        window.scrollTo(0, document.body.scrollHeight);
+        await new Promise(r => setTimeout(r, isCmd ? 30 : 5));
+      }
+      
+      outputDiv.innerHTML += suffix;
+    }
+
+    async function runTerminal() {
+      for (const item of cvData) {
+        if (item.type === 'cmd') {
+          await new Promise(r => setTimeout(r, 800));
+          await typeText(item.text, true);
+        } else {
+          await new Promise(r => setTimeout(r, 400));
+          await typeText(item.text + '\n', false);
+        }
+      }
+      
+      setTimeout(() => {
+        links.style.display = 'block';
+        cursor.style.display = 'none';
+        window.scrollTo(0, document.body.scrollHeight);
+      }, 500);
+    }
+
+    window.onload = () => {
+      setTimeout(runTerminal, 1000);
+    };
+  </script>
+</body>
+</html>
