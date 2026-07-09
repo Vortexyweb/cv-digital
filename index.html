@@ -185,6 +185,9 @@
 
   <script>
     const cvData = [
+      { type: 'output', text: '<span class="output-text">Last login: Thu Jul 09 13:15:22 on console</span>\n<span class="output-info">Welcome to GabrielOS (Darwin Kernel Version 22.1.0)</span>\n' },
+      { type: 'cmd', text: 'fetch-profile --user gabriel_bueno' },
+      { type: 'output', text: '<span class="output-info">[✓] Autenticação concluída.</span>\n<span class="output-info">[✓] Permissões verificadas.</span>\n<span class="output-info">[✓] Carregando módulos do currículo...</span>\n' },
       { type: 'cmd', text: 'dig TXT bio.cv.local +short' },
       { type: 'output', text: '<span class="output-text">"Gabriel Bueno - Estudante de ADS na Uninter e Desenvolvedor Backend."</span>\n<span class="output-text">"Transição de sólida experiência em coordenação operacional e liderança para TI."</span>\n<span class="output-text">"Foco em Node.js, Python, FastAPI, e Arquitetura de Redes."</span>' },
       { type: 'cmd', text: 'dig TXT skills.cv.local +short' },
