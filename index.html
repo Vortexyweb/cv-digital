@@ -220,7 +220,7 @@
       for (let i = 0; i < text.length; i++) {
         outputDiv.innerHTML += text.charAt(i);
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
-        await new Promise(r => setTimeout(r, 40));
+        await new Promise(r => setTimeout(r, 60)); // Digitação mais lenta (era 40)
       }
       
       outputDiv.innerHTML += suffix;
@@ -229,10 +229,10 @@
     async function runTerminal() {
       for (const item of cvData) {
         if (item.type === 'cmd') {
-          await new Promise(r => setTimeout(r, 600));
+          await new Promise(r => setTimeout(r, 1500)); // Pausa maior antes de digitar o comando (era 600)
           await typeText(item.text, true);
         } else {
-          await new Promise(r => setTimeout(r, 200));
+          await new Promise(r => setTimeout(r, 600)); // Pausa maior para fingir processamento (era 200)
           await typeText(item.text, false);
         }
       }
@@ -241,11 +241,11 @@
         links.style.display = 'flex';
         cursor.style.display = 'none';
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      }, 500);
+      }, 1000); // Pausa maior antes de exibir botões finais
     }
 
     window.onload = () => {
-      setTimeout(runTerminal, 800);
+      setTimeout(runTerminal, 1000); // Pausa inicial levemente maior
     };
   </script>
 </body>
